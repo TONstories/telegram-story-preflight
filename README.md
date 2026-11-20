@@ -1,10 +1,14 @@
 # Telegram Story Preflight
 
-[Русский](README.ru.md)
+![Telegram Story Preflight — Check story assets before upload.](banner.webp)
 
-Check local story media before uploading through the Telegram Bot API.
+[Русский](README.ru.md) · [Release notes](https://github.com/TONstories/telegram-story-preflight/releases) · [0BSD license](LICENSE)
 
-![Example report](example.png)
+Check story assets before upload. Install FFmpeg and verify that ffprobe is on PATH. Give the checker one local asset or a flat delivery folder containing only assets. It inspects up to four files concurrently and keeps the output ordered by filename, so a batch report can be compared between revisions. Source files are opened read-only.
+
+## Try the included example
+
+Requires Python 3.9 or later. The example intentionally includes a finding and exits with status 1.
 
 ```sh
 git clone https://github.com/TONstories/telegram-story-preflight.git
@@ -16,10 +20,22 @@ python3 preflight.py examples
 small.jpg: resize to 1080x1920
 ```
 
-Install FFmpeg with ffprobe on PATH. Pass one file or a flat folder of assets. JPEG and PNG stills and MP4 videos are the intended inputs. Checks dimensions, file size, video codec and duration. Streamability, exact keyframe cadence, server acceptance and permissions require additional verification. [Bot API rules](https://core.telegram.org/bots/api#inputstorycontentvideo).
+## Reviewing a folder of creatives
 
-Python 3.9+. Add --json for structured results. Exit codes: 0 passes the implemented checks, 1 has findings, 2 indicates an input or invocation error.
+```sh
+python3 preflight.py examples --json
+```
 
-0.152 s · macOS · Python · bundled example · single local run.
+For a still image, check dimensions and size first. For video, the report also checks the container family, codec and reported duration. An unreadable file gets its own finding. Treat a successful report as a pass for these local checks. Keyframe interval, streamability, server acceptance and account permissions still need separate verification. See the [official story media types](https://core.telegram.org/bots/api#inputstorycontentvideo).
 
-Built by TON Stories, a marketplace connecting advertisers with creators for Telegram Stories campaigns. [TON Stories](https://tonstories.com/?utm_source=github&utm_medium=referral&utm_campaign=open_source&utm_content=telegram-story-preflight) · [Telegram](https://t.me/TON_Storiesbot?start=gh_telegram_story_preflight)
+## CI and coding agents
+
+Use the JSON report when consuming results programmatically. Its `findings` array contains one diagnostic per detected issue. Exit 0 means the implemented rules passed, exit 1 means review the findings, and exit 2 means the command or input could not be processed. Capture stderr separately for invocation errors. Run `python3 test_example.py` to exercise the bundled fixture and a corrected input. Agent setup is documented in [AGENTS.md](AGENTS.md).
+
+## Performance
+
+On a local Apple Silicon Mac, checking 32 local 1080 × 1920 JPEGs took **0.114 s** versus **0.205 s** with v0.1.0. Both numbers are the median of three paired CLI runs with identical local input, including interpreter startup. Timing varies with hardware, storage and input composition.
+
+## Maintainer
+
+Built by Tone Stories, a marketplace connecting advertisers with creators for Telegram Stories campaigns. [Tone Stories](https://tonstories.com/?utm_source=github&utm_medium=referral&utm_campaign=open_source&utm_content=telegram-story-preflight) · [Telegram](https://t.me/TON_Storiesbot?start=gh_telegram_story_preflight)

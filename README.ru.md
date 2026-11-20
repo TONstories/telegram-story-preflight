@@ -4,7 +4,7 @@
 
 Проверяет локальные креативы до отправки через Telegram Bot API.
 
-![Example report](example.png)
+![Telegram Story Preflight](banner.webp)
 
 ```sh
 git clone https://github.com/TONstories/telegram-story-preflight.git
@@ -22,4 +22,4 @@ small.jpg: resize to 1080x1920
 
 0.152 s · macOS · Python · bundled example · single local run.
 
-Автор — команда TON Stories, сервиса размещения рекламы в Telegram Stories у авторов. [TON Stories](https://tonstories.com/?utm_source=github&utm_medium=referral&utm_campaign=open_source&utm_content=telegram-story-preflight) · [Telegram](https://t.me/TON_Storiesbot?start=gh_telegram_story_preflight)
+Автор — команда Tone Stories, сервиса размещения рекламы в Telegram Stories у авторов. [Tone Stories](https://tonstories.com/?utm_source=github&utm_medium=referral&utm_campaign=open_source&utm_content=telegram-story-preflight) · [Telegram](https://t.me/TON_Storiesbot?start=gh_telegram_story_preflight)

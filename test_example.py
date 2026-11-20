@@ -16,3 +16,10 @@ with tempfile.TemporaryDirectory() as folder:
     target.write_bytes(Path('examples/good.jpg').read_bytes())
     command[1] = str(target)
     assert check(command, 0) == []
+
+with tempfile.TemporaryDirectory() as folder:
+    for name in ["b.jpg", "a.jpg"]:
+        (Path(folder) / name).write_bytes(b"damaged image")
+    assert check(["preflight.py", folder], 1) == [
+        f"{name}: unreadable or missing visual stream" for name in ["a.jpg", "b.jpg"]
+    ]
